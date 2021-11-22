@@ -1,0 +1,20 @@
+<h2>Antimicrobial Resistance</h2><p>Antimicrobial resistance (AMR) is one of the major challenges to human health. Antimicrobial resistant organisms are not inhibited or killed by standard treatments, which can result in poorer health outcomes. AMR encompasses resistance in bacterial (e.g.&nbsp;<em>E. coli</em>) , protozoal (e.g.&nbsp;malaria), viral (e.g.&nbsp;influenza), and fungal pathogens.</p><p>The recent <a href='https://amr-review.org'>O’Neill report</a> estimated that, by 2050, 10 million people will die every year due to antimicrobial resistance (AMR) unless a global response to the problem of AMR is mounted. More information on AMR can be found by following these links: </p><ul><li>National Action Plan</li><li><a href='http://www.who.int/antimicrobial-resistance/en/'>World Health Organization</a></li><li><a href='https://www.cdc.gov/drugresistance/about.html'>US Centers for Disease Control</a></li><li><a href='https://www.gov.uk/government/collections/antimicrobial-resistance-amr-information-and-resources'>Public Health England</a></li></ul><p>This web application focuses on AMR in bacteria, i.e. antibiotic resistance. The purpose of the application is to allow clinicians and laboratory workers to upload laboratory data and generate flexible summary tables and plots based on the reporting requirements of the World Health Organization Global Antimicrobial Resistance Surveillance System (WHO GLASS)</a>.</p>
+
+
+<h2>About this application</h2>There are six webpages in this application, including Welcome, Patients, Blood culture, Specimens, Organisms and AMR. You are in the Welcome page now. For the next tabs, on the left hand side of the page, there is a <strong>“Filter the Dataset”</strong> option for the users to select and the information will be displayed on the right hand side of the page. <strong>Patient page</strong> gives basic information on where patients were from.  <strong>Blood culture page</strong> provides information on blood cultures received during the defined period with of the culture results. <strong>Specimen page</strong> gives information on numbers of specimens received (by specimen type). <strong>Organism page</strong> provide information on organisms isolated; and <strong>AMR page</strong> displays AMR data on GLASS and other key pathogens.
+
+
+<h2>Acknowledgments and credits</h2>
+Application development team: Olivier Celhay (https://olivier.celhay.net), Dr Vilada Chansamouth, Dr Tamalee Roberts and Prof. Paul Newton. Revised with contributions from: Prof. Elizabeth Ashley, Prof. David Dance, Ms Viengmon Davong, Dr Manivanh Vongsouvath and Prof. Mayfong Mayxay. Data collection and dashboard development are the Wellcome Trust of Great Britain and partly supported the UK Fleming Fund, United Kingdom.
+
+<h2>Contact</h2>
+For any inquiry on this application, please contact Vilada Chansamouth (vilada@tropmedres.ac)
+
+
+<h2>Disclaimer</h2>
+The information contained in this application is the property of Mahosot hospital/LOMWRU and may not be reproduced or distributed in any manner without express written permission.
+While <em>Mahosot Hospital/LOMWRU</em> has attempted to ensure the accuracy of the data it is reporting, it makes no representations or warranties, expressed or implied, as to the accuracy or completeness of the information reported. Likewise, <em>Mahosot Hospital/LOMWRU</em> makes no representations or warranties, expressed or implied, as to the accuracy of the comparative data provided herein. <em>Mahosot Hospital/LOMWRU</em> assumes no legal liability or responsibility for any errors or omissions in the information or for any loss or damage resulting from the use of any information contained on these pages.
+This report is not intended to provide medical advice.
+
+
+PLEASE NOTE: This app may time-out if left idle too long, which will cause the screen to grey-out. To use the app again, refresh the page. This will reset all previously-selected input options.

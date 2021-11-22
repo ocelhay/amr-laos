@@ -1,0 +1,46 @@
+---
+title: "AMR Report"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+Report generated the `r Sys.time()`.
+
+## Total Patients per Place of Collection
+
+```{r fig.width = 6, fig.height = 4}
+amr_filt() %>% 
+  group_by(location) %>% summarise(count = n_distinct(patient_id)) %>% ungroup() %>%
+  mutate(location = fct_reorder(location, count, .desc = FALSE)) %>%
+  ggplot(aes(x = location, weight = count)) + 
+  geom_bar() +
+  geom_label(aes(y = count, label = count)) +
+  coord_flip() +
+  labs(x = NULL, y = "Total Patients", x = "Collection Place") +
+  theme_minimal()
+```
+
+## Blood Culture
+
+### Sample Growth
+
+```{r fig.width = 2, fig.height = 2}
+amr_blood_filt() %>% 
+    group_by(spec_id) %>% filter(row_number() == 1) %>% ungroup() %>%
+    mutate(growth = ifelse(org_name == "No growth", "No Growth", "Growth")) %>%
+    count(growth) %>%
+    ggplot(aes(x = growth, weight = n, group = growth)) + 
+    geom_bar() +
+    geom_label(aes(y = n, label = n)) +
+    labs(x = NULL, y = NULL, title = NULL) +
+    theme_minimal(base_size = 16) +
+    theme(legend.position = "none", 
+          axis.title.y = element_blank(),
+          axis.text.y = element_blank(),
+          axis.ticks.y = element_blank(),
+          axis.text.x = element_text(angle = 45, hjust = 1, vjust = 1))
+```
+

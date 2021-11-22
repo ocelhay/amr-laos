@@ -1,0 +1,14 @@
+
+amr-laos.Rproj
+inst/.DS_Store
+inst/amr-laos/.DS_Store
+inst/amr-laos/rsconnect/.DS_Store
+inst/amr-laos/rsconnect/shinyapps.io/.DS_Store
+inst/amr-laos/rsconnect/shinyapps.io/livedataoxford/amrlaos.dcf
+inst/amr-laos/www/.DS_Store
+misc/.DS_Store
+misc/data_processed/.DS_Store
+misc/data_provided_gitignored/LIMS_AMR_combined_18082021.xlsx
+misc/data_processed/lims_processed.xlsx
+misc/data_processed/lims_processed.RData
+inst/amr-laos/www/R/.DS_Store
