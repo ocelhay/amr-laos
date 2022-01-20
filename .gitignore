@@ -12,3 +12,4 @@ misc/data_provided_gitignored/LIMS_AMR_combined_18082021.xlsx
 misc/data_processed/lims_processed.xlsx
 misc/data_processed/lims_processed.RData
 inst/amr-laos/www/R/.DS_Store
+.DS_Store
