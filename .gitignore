@@ -13,3 +13,4 @@ misc/data_processed/lims_processed.xlsx
 misc/data_processed/lims_processed.RData
 inst/amr-laos/www/R/.DS_Store
 .DS_Store
+.Rproj.user

@@ -103,9 +103,6 @@ ui <- fluidPage(
                                          htmlOutput("data_status")
                                   )
                                 ),
-                                hr(),
-                                a(href = "http://www.tropmedres.ac/home", target = "_blank", img(src = "img_MORU_logo.jpg")),
-                                br(),
                                 conditionalPanel("input.selected_language == 'en'",
                                                  includeMarkdown("./www/markdown/about_en.md")),
                                 conditionalPanel("input.selected_language == 'la'",
