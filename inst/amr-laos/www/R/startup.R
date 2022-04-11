@@ -17,7 +17,7 @@ cols_sir <- c("#2166ac", "#fddbc7", "#b2182b", "#969696")
 # Colors order: Negative, Positive, Unknown
 cols_esbl <- c("#2166ac", "#b2182b", "#969696")
 
-amr_theme <- bslib::bs_theme(bootswatch = "spacelab", version = 3)
+amr_theme <- bslib::bs_theme(bootswatch = "spacelab", version = 4)
 
 source("www/R/function/highchart_sir.R", local = TRUE)$value
 source("www/R/function/highchart_sir_evolution.R", local = TRUE)$value

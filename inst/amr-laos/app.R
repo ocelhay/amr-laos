@@ -1,298 +1,307 @@
 source("www/R/startup.R", local = TRUE)
 
 # Define UI ----
-ui <- fluidPage(
+ui <- page(
   theme = amr_theme,
   includeCSS("www/styles.css"),
-  
-  sidebarPanel(width = 4,
-               div(class = "imgsolidborder4", img(src = "img_LOMWRU_Partners.jpg", alt = "LOMWRU")),
-               h3("AMR Dashboard"),
-               conditionalPanel(condition = "input.tabs == 'welcome'",
-                                div(class = "imgsolidborder4", img(src = "img_ecoli_LOMWRU.png", alt = "Antibiotic susceptibility testing of a multi-drug resistant Escherichia coli isolated from the urine of a 51 year old Lao patient with a perinephric abscess. There are no inhibition zones surrounding any of the antibiotic disks, including meropenem (MEM, 12 o’clock position), a ‘last-line’ antibiotic. Whole-genome sequencing confirmed that this isolate was carrying a NDM-5 carbapenemase. Such infections are likely to become more frequent, given the ability of carbapenemases to spread and the increasing availability of meropenem in Laos.")),
-                                conditionalPanel("input.selected_language == 'en'",
-                                                 includeMarkdown("./www/markdown/ecoli_legend_en.md")
-                                ),
-                                conditionalPanel("input.selected_language == 'la'",
-                                                 includeMarkdown("./www/markdown/ecoli_legend_la.md")
-                                )
-               ),
-               br(),
-               
-               conditionalPanel(condition = "input.tabs == 'patients' | input.tabs == 'blood_culture' | input.tabs == 'specimens' | input.tabs == 'organisms' | input.tabs == 'amr'",
-                                div(class = "border4",
-                                    
-                                    htmlOutput("data_status_duplicated"),
-                                    
-                                    h3(icon("filter", "fa-1x"), "Filter the Dataset:"),
-                                    
-                                    fluidRow(
-                                      column(width = 4, p("Patients Age Range (Year):")),
-                                      column(width = 8, sliderInput("age_patients_selection", label = NULL, min = 0, max = oldest_patient, value = c(0, oldest_patient)))
-                                    ),
-                                    fluidRow(
-                                      column(width = 4, p("Patients Province of Residence:")),
-                                      column(width = 8, pickerInput(inputId = "province_patients_selection", label = NULL, multiple = TRUE,
-                                                                    choices = all_provinces, selected = all_provinces, options = list(
-                                                                      `actions-box` = TRUE, `deselect-all-text` = "None...",
-                                                                      `select-all-text` = "Select All", `none-selected-text` = "None Selected")
-                                      ))
-                                    ),
-                                    hr(),
-                                    fluidRow(
-                                      column(width = 4, p("Specimens Collection Date:")),
-                                      column(width = 8, selectInput("date_range_selection", label = NULL, choices = c("Filter by Year", "Filter by Date Range")),
-                                             conditionalPanel("input.date_range_selection == 'Filter by Year'",
-                                                              checkboxGroupInput("year_selection", label = NULL, choices = all_spec_year, selected = all_spec_year, inline = TRUE)
-                                                              
-                                             ),
-                                             conditionalPanel("input.date_range_selection == 'Filter by Date Range'",
-                                                              br(), br(),
-                                                              dateRangeInput("date_selection", label = NULL, start = min_collection_date, end = max_collection_date)
-                                             ))
-                                    ),
-                                    fluidRow(
-                                      column(width = 4, p("Specimens Collection Location:")),
-                                      column(width = 8, pickerInput(inputId = "spec_method_collection", label = NULL, multiple = TRUE,
-                                                                    choices = all_locations, selected = all_locations, options = list(
-                                                                      `actions-box` = TRUE, `deselect-all-text` = "None...",
-                                                                      `select-all-text` = "Select All", `none-selected-text` = "None Selected")
-                                      )
-                                      )),
-                                    
-                                    conditionalPanel(condition = "input.tabs == 'blood_culture'",
-                                                     fluidRow(
-                                                       column(width = 4, p("Specimens Collection Method:")),
-                                                       column(width = 8, strong("Blood Culture Only"))
-                                                     )
-                                    ),
-                                    conditionalPanel(condition = "input.tabs == 'patients' | input.tabs == 'specimens' | input.tabs == 'organisms' | input.tabs == 'amr'",
-                                                     fluidRow(
-                                                       column(width = 4, p("Specimens Collection Method:")),
-                                                       column(width = 8, pickerInput(inputId = "spec_method_selection", label = NULL, multiple = TRUE,
-                                                                                     choices = all_spec_method, selected = all_spec_method, options = list(
-                                                                                       `actions-box` = TRUE, `deselect-all-text` = "None...",
-                                                                                       `select-all-text` = "Select All", `none-selected-text` = "None Selected")
-                                                       )
-                                                       )
-                                                     )
-                                    ),
-                                    conditionalPanel(condition = "input.tabs == 'patients' | input.tabs == 'specimens' | input.tabs == 'organisms' | input.tabs == 'amr'",
-                                                     htmlOutput("filter_text")
-                                    ),
-                                    conditionalPanel(condition = "input.tabs == 'blood_culture'",
-                                                     htmlOutput("filter_text_blood")
-                                    )
-                                )
-               )
-  ),
-  
-  mainPanel(width = 8,
-            # conditionalPanel(condition = "input.tabs == 'patients' | input.tabs == 'specimens' | input.tabs == 'blood_culture' | input.tabs == 'organisms' | input.tabs == 'amr'",
-            #                  div(class = 'float-download', downloadButton("report", "Generate Report"))
-            # ),
-            navbarPage(NULL, position = "static-top", id = "tabs", collapsible = TRUE,  windowTitle = "LOMWRU AMR Dashboard",
-                       tabPanel("Welcome", value = "welcome",
-                                fluidRow(
-                                  column(width = 2,
-                                         div(class = "large",
-                                             selectInput("selected_language", span(icon("language"), "Language"),
-                                                         choices = c("Lao" = "la", "English" = "en"), selected = "en", width = "150px"),
-                                         )),
-                                  column(width = 10,
-                                         htmlOutput("data_status")
-                                  )
-                                ),
-                                conditionalPanel("input.selected_language == 'en'",
-                                                 includeMarkdown("./www/markdown/about_en.md")),
-                                conditionalPanel("input.selected_language == 'la'",
-                                                 includeMarkdown("./www/markdown/about_la.md"))
+  page_navbar(
+    title = "Lao AMR Dashboard",
+    id = "tabs",
+    selected = "welcome",
+    window_title = "Lao AMR Dashboard",
+    collapsible = TRUE, inverse = FALSE, 
+    position = "static-top",
+    
+    # Header with filters -----------------------------------------------------
+    header = div(conditionalPanel(
+      condition = "input.tabs != 'welcome'",
+      div(id = "header-filter",
+          div(class = "border4",
+              fluidRow(
+                column(3, htmlOutput("data_status_duplicated")),
+                column(3, 
+                       h3(icon("filter", "fa-1x"), "Filter the Dataset:"),
+                       
+                       fluidRow(
+                         column(4, p("Patients Age Range (Year):")),
+                         column(8, sliderInput("age_patients_selection", label = NULL, min = 0, max = oldest_patient, value = c(0, oldest_patient)))
                        ),
-                       tabPanel("Patients", value = "patients",
-                                h2("Total Patients per Place of Collection"),
-                                plotOutput("patients_nb", height = "600px") %>% withSpinner()
-                       ),
-                       tabPanel("Blood Culture", value = "blood_culture",
-                                fluidRow(
-                                  column(2, h2("Sample Growth")),
-                                  column(10, div(class = "cent", h2("Specimens Origins")))
-                                ),
-                                fluidRow(
-                                  column(width = 2,
-                                         br(),
-                                         br(),
-                                         plotOutput("growth_blood", height = "250px") %>% withSpinner()
-                                  ),
-                                  column(width = 5,
-                                         plotOutput("province_specimen_blood") %>% withSpinner()
-                                  ),
-                                  column(width = 5,
-                                         plotOutput("hospital_specimen_blood") %>% withSpinner()
-                                  )
-                                ),
-                                h2("Organism"),
-                                fluidRow(
-                                  column(width = 8,
-                                         p("The graph below displays the 25 most commons organisms. Please see table to right for complete listing."),
-                                         plotOutput("count_organisms_blood", height = "600px") %>% withSpinner()
-                                  ),
-                                  column(width = 4,
-                                         p("Table of all organisms:"),
-                                         DTOutput("table_organisms_blood") %>% withSpinner()
-                                  )
-                                ),
-                                br()
-                       ),
-                       tabPanel("Specimens", value = "specimens",
-                                h2("Total Specimens per Specimen Type"),
-                                p("Use filters located on the the sidebar to select and display, for example, only specimens collected in a specific hospital."),
-                                plotOutput("specimens_method", height = "600px") %>% withSpinner()
-                       ),
-                       tabPanel("Organisms", value = "organisms",
-                                h2("Total Number of Positive Isolates per Specimen"),
-                                plotOutput("isolates_method", height = "600px") %>% withSpinner(),
-                                h2("Total Number of Isolates by Organism"),
-                                fluidRow(
-                                  column(width = 8, 
-                                         p("The graph below displays the 25 organisms with the most isolates, report to the table for the complete listing."),
-                                         plotOutput("isolates_organisms", height = "600px") %>% withSpinner()),
-                                  column(width = 4, dataTableOutput("table_isolates_organisms") %>% withSpinner())
-                                )
-                       ),
-                       tabPanel("AMR", value = "amr", icon = icon("bug"),
-                                tabsetPanel(
-                                  tabPanel("Acinetobacter species",
-                                           br(),
-                                           fluidRow(
-                                             htmlOutput("organism_isolates_ab"),
-                                             column(width = 8,
-                                                    h2("Susceptibility Status"),
-                                                    highchartOutput("organism_sir_ab", height = "600px") %>% withSpinner()
-                                             ),
-                                             column(width = 4,
-                                                    h3("Carbapenem-resistant Acinetobacter species"),
-                                                    highchartOutput("carbapenem_ab", height = "500px") %>% withSpinner()
-                                                    
-                                             )
-                                           )
-                                  ),
-                                  tabPanel("E. coli",
-                                           br(),
-                                           fluidRow(
-                                             htmlOutput("organism_isolates_ec"),
-                                             column(width = 6,
-                                                    h2("Susceptibility Status"),
-                                                    highchartOutput("organism_sir_ec", height = "600px") %>% withSpinner()
-                                             ),
-                                             column(width = 6,
-                                                    h2("ESBL Results per Quarter"),
-                                                    highchartOutput("esbl_ec", height = "600px") %>% withSpinner()
-                                             )
-                                           )
-                                  ),
-                                  tabPanel("K. pneumoniae",
-                                           br(),
-                                           fluidRow(
-                                             htmlOutput("organism_isolates_kp"),
-                                             column(width = 6,
-                                                    h2("Susceptibility Status"),
-                                                    highchartOutput("organism_sir_kp", height = "600px") %>% withSpinner()
-                                             ),
-                                             column(width = 6,
-                                                    h2("ESBL Results per Quarter"),
-                                                    highchartOutput("esbl_kp", height = "600px") %>% withSpinner()
-                                             )
-                                           )
-                                  ),
-                                  tabPanel("S. aureus",
-                                           br(),
-                                           fluidRow(
-                                             htmlOutput("organism_isolates_sa"),
-                                             column(width = 6,
-                                                    h2("Susceptibility Status"),
-                                                    highchartOutput("organism_sir_sa", height = "600px") %>% withSpinner()
-                                             ),
-                                             column(width = 6,
-                                                    h2("MRSA per Quarter"),
-                                                    highchartOutput("organism_mrsa_sa", height = "600px") %>% withSpinner()
-                                             )
-                                           )
-                                  ),
-                                  tabPanel("S. pneumoniae",
-                                           br(),
-                                           fluidRow(
-                                             htmlOutput("organism_isolates_sp"),
-                                             column(width = 8,
-                                                    h2("Susceptibility Status"),
-                                                    highchartOutput("organism_sir_sp", height = "600px") %>% withSpinner()
-                                             ),
-                                             column(width = 4,
-                                                    h3("Penicillin-resistant S. pneumoniae"),
-                                                    highchartOutput("penicilin_sp", height = "500px") %>% withSpinner()
-                                             )
-                                           )
-                                  ),
-                                  tabPanel("Salmonella Typhi",
-                                           br(),
-                                           fluidRow(
-                                             htmlOutput("organism_isolates_st"),
-                                             column(width = 8,
-                                                    h2("Susceptibility Status"),
-                                                    highchartOutput("organism_sir_st", height = "600px") %>% withSpinner()
-                                             ),
-                                             column(width = 4,
-                                                    h3("Ciprofloxacin-resistant Salmonella Typhi"),
-                                                    highchartOutput("ciprofloxacin_st", height = "500px") %>% withSpinner()
-                                             )
-                                           )
-                                  ),
-                                  tabPanel("Shigella spp.",
-                                           br(),
-                                           fluidRow(
-                                             htmlOutput("organism_isolates_shig"),
-                                             column(width = 8,
-                                                    h2("Susceptibility Status"),
-                                                    highchartOutput("organism_sir_shig", height = "600px") %>% withSpinner()
-                                             ),
-                                             column(width = 4,
-                                                    h3("Ciprofloxacin-resistant Shigella spp."),
-                                                    highchartOutput("ciproflaxin_shig", height = "500px") %>% withSpinner()
-                                             )
-                                           )
-                                  ),
-                                  tabPanel("Neisseria gonorrhoeae",
-                                           br(),
-                                           fluidRow(
-                                             htmlOutput("organism_isolates_ng"),
-                                             column(width = 8,
-                                                    h2("Susceptibility Status"),
-                                                    highchartOutput("organism_sir_ng", height = "600px") %>% withSpinner()
-                                             ),
-                                             column(width = 4,
-                                                    h3("Ceftriaxone-resistant N. gonorrhoeae"),
-                                                    highchartOutput("ceftriaxone_gon", height = "500px") %>% withSpinner()
-                                             )
-                                           )
-                                  ),
-                                  tabPanel("All Organisms",
-                                           br(),
-                                           pickerInput(inputId = "organism", label = NULL, multiple = FALSE,
-                                                       choices = all_org_name, selected = all_org_name[1]),
-                                           br(),
-                                           fluidRow(
-                                             htmlOutput("organism_isolates_all"),
-                                             column(width = 8,
-                                                    h2("Susceptibility Status"),
-                                                    highchartOutput("organism_sir_all", height = "600px") %>% withSpinner()
-                                             ),
-                                             column(width = 4,
-                                                    br()
-                                             )
-                                           )
-                                  )
-                                )
+                       fluidRow(
+                         column(4, p("Patients Province of Residence:")),
+                         column(8, pickerInput(inputId = "province_patients_selection", label = NULL, multiple = TRUE,
+                                               choices = all_provinces, selected = all_provinces, options = list(
+                                                 `actions-box` = TRUE, `deselect-all-text` = "None...",
+                                                 `select-all-text` = "Select All", `none-selected-text` = "None Selected")
+                         ))
                        )
-            )
+                ),
+                column(3,
+                       fluidRow(
+                         column(4, p("Specimens Collection Date:")),
+                         column(8, selectInput("date_range_selection", label = NULL, choices = c("Filter by Year", "Filter by Date Range")),
+                                conditionalPanel("input.date_range_selection == 'Filter by Year'",
+                                                 checkboxGroupInput("year_selection", label = NULL, choices = all_spec_year, selected = all_spec_year, inline = TRUE)
+                                                 
+                                ),
+                                conditionalPanel("input.date_range_selection == 'Filter by Date Range'",
+                                                 br(), br(),
+                                                 dateRangeInput("date_selection", label = NULL, start = min_collection_date, end = max_collection_date)
+                                ))
+                       )
+                ),
+                column(3,
+                       fluidRow(
+                         column(4, p("Specimens Collection Location:")),
+                         column(8, pickerInput(inputId = "spec_method_collection", label = NULL, multiple = TRUE,
+                                               choices = all_locations, selected = all_locations, options = list(
+                                                 `actions-box` = TRUE, `deselect-all-text` = "None...",
+                                                 `select-all-text` = "Select All", `none-selected-text` = "None Selected")),
+                                conditionalPanel(condition = "input.tabs == 'blood_culture'",
+                                                 fluidRow(
+                                                   column(4, p("Specimens Collection Method:")),
+                                                   column(8, strong("Blood Culture Only"))
+                                                 )
+                                ),
+                                conditionalPanel(condition = "input.tabs == 'patients' | input.tabs == 'specimens' | input.tabs == 'organisms' | input.tabs == 'amr'",
+                                                 fluidRow(
+                                                   column(4, p("Specimens Collection Method:")),
+                                                   column(8, pickerInput(inputId = "spec_method_selection", label = NULL, multiple = TRUE,
+                                                                         choices = all_spec_method, selected = all_spec_method, options = list(
+                                                                           `actions-box` = TRUE, `deselect-all-text` = "None...",
+                                                                           `select-all-text` = "Select All", `none-selected-text` = "None Selected")
+                                                   )
+                                                   )
+                                                 )
+                                ),
+                                conditionalPanel(condition = "input.tabs == 'patients' | input.tabs == 'specimens' | input.tabs == 'organisms' | input.tabs == 'amr'",
+                                                 htmlOutput("filter_text")
+                                ),
+                                conditionalPanel(condition = "input.tabs == 'blood_culture'",
+                                                 htmlOutput("filter_text_blood")
+                                )
+                         )
+                       )
+                ))
+          ))
+    )
+    ),
+    
+    # Start Tabs --------------------------------------------------------------
+    nav("Welcome", value = "welcome",
+        fluidRow(
+          column(4,
+                 div(class = "imgsolidborder4", img(src = "img_LOMWRU_Partners.jpg", alt = "LOMWRU")),
+                 div(class = "large",
+                     selectInput("selected_language", span(icon("language"), "Language"),
+                                 choices = c("Lao" = "la", "English" = "en"), selected = "en", width = "150px"),
+                 )),
+          column(8,
+                 htmlOutput("data_status")
+          )
+        ),
+        fluidRow(
+          column(4,
+                 div(class = "imgsolidborder4", img(src = "img_ecoli_LOMWRU.png", alt = "Antibiotic susceptibility testing of a multi-drug resistant Escherichia coli isolated from the urine of a 51 year old Lao patient with a perinephric abscess. There are no inhibition zones surrounding any of the antibiotic disks, including meropenem (MEM, 12 o’clock position), a ‘last-line’ antibiotic. Whole-genome sequencing confirmed that this isolate was carrying a NDM-5 carbapenemase. Such infections are likely to become more frequent, given the ability of carbapenemases to spread and the increasing availability of meropenem in Laos.")),
+                 conditionalPanel("input.selected_language == 'en'",
+                                  includeMarkdown("./www/markdown/ecoli_legend_en.md")
+                 ),
+                 conditionalPanel("input.selected_language == 'la'",
+                                  includeMarkdown("./www/markdown/ecoli_legend_la.md")
+                 )
+          ),
+          column(8,
+                 
+                 conditionalPanel("input.selected_language == 'en'",
+                                  includeMarkdown("./www/markdown/about_en.md")),
+                 conditionalPanel("input.selected_language == 'la'",
+                                  includeMarkdown("./www/markdown/about_la.md"))
+          )
+        )
+    ),
+    nav("Patients", value = "patients",
+        h2("Total Patients per Place of Collection"),
+        plotOutput("patients_nb", height = "600px") %>% withSpinner()
+    ),
+    nav("Blood Culture", value = "blood_culture",
+        fluidRow(
+          column(2, h2("Sample Growth")),
+          column(10, div(class = "cent", h2("Specimens Origins")))
+        ),
+        fluidRow(
+          column(2,
+                 br(),
+                 br(),
+                 plotOutput("growth_blood", height = "250px") %>% withSpinner()
+          ),
+          column(5,
+                 plotOutput("province_specimen_blood") %>% withSpinner()
+          ),
+          column(5,
+                 plotOutput("hospital_specimen_blood") %>% withSpinner()
+          )
+        ),
+        h2("Organism"),
+        fluidRow(
+          column(8,
+                 p("The graph below displays the 25 most commons organisms. Please see table to right for complete listing."),
+                 plotOutput("count_organisms_blood", height = "600px") %>% withSpinner()
+          ),
+          column(4,
+                 p("Table of all organisms:"),
+                 DTOutput("table_organisms_blood") %>% withSpinner()
+          )
+        ),
+        br()
+    ),
+    nav("Specimens", value = "specimens",
+        h2("Total Specimens per Specimen Type"),
+        p("Use filters located on the the sidebar to select and display, for example, only specimens collected in a specific hospital."),
+        plotOutput("specimens_method", height = "600px") %>% withSpinner()
+    ),
+    nav("Organisms", value = "organisms",
+        h2("Total Number of Positive Isolates per Specimen"),
+        plotOutput("isolates_method", height = "600px") %>% withSpinner(),
+        h2("Total Number of Isolates by Organism"),
+        fluidRow(
+          column(8, 
+                 p("The graph below displays the 25 organisms with the most isolates, report to the table for the complete listing."),
+                 plotOutput("isolates_organisms", height = "600px") %>% withSpinner()),
+          column(4, dataTableOutput("table_isolates_organisms") %>% withSpinner())
+        )
+    ),
+    nav("AMR", value = "amr", icon = icon("bug"),
+        tabsetPanel(
+          tabPanel("Acinetobacter species",
+                   br(),
+                   fluidRow(
+                     htmlOutput("organism_isolates_ab"),
+                     column(8,
+                            h2("Susceptibility Status"),
+                            highchartOutput("organism_sir_ab", height = "600px") %>% withSpinner()
+                     ),
+                     column(4,
+                            h3("Carbapenem-resistant Acinetobacter species"),
+                            highchartOutput("carbapenem_ab", height = "500px") %>% withSpinner()
+                            
+                     )
+                   )
+          ),
+          tabPanel("E. coli",
+                   br(),
+                   fluidRow(
+                     htmlOutput("organism_isolates_ec"),
+                     column(6,
+                            h2("Susceptibility Status"),
+                            highchartOutput("organism_sir_ec", height = "600px") %>% withSpinner()
+                     ),
+                     column(6,
+                            h2("ESBL Results per Quarter"),
+                            highchartOutput("esbl_ec", height = "600px") %>% withSpinner()
+                     )
+                   )
+          ),
+          tabPanel("K. pneumoniae",
+                   br(),
+                   fluidRow(
+                     htmlOutput("organism_isolates_kp"),
+                     column(6,
+                            h2("Susceptibility Status"),
+                            highchartOutput("organism_sir_kp", height = "600px") %>% withSpinner()
+                     ),
+                     column(6,
+                            h2("ESBL Results per Quarter"),
+                            highchartOutput("esbl_kp", height = "600px") %>% withSpinner()
+                     )
+                   )
+          ),
+          tabPanel("S. aureus",
+                   br(),
+                   fluidRow(
+                     htmlOutput("organism_isolates_sa"),
+                     column(6,
+                            h2("Susceptibility Status"),
+                            highchartOutput("organism_sir_sa", height = "600px") %>% withSpinner()
+                     ),
+                     column(6,
+                            h2("MRSA per Quarter"),
+                            highchartOutput("organism_mrsa_sa", height = "600px") %>% withSpinner()
+                     )
+                   )
+          ),
+          tabPanel("S. pneumoniae",
+                   br(),
+                   fluidRow(
+                     htmlOutput("organism_isolates_sp"),
+                     column(8,
+                            h2("Susceptibility Status"),
+                            highchartOutput("organism_sir_sp", height = "600px") %>% withSpinner()
+                     ),
+                     column(4,
+                            h3("Penicillin-resistant S. pneumoniae"),
+                            highchartOutput("penicilin_sp", height = "500px") %>% withSpinner()
+                     )
+                   )
+          ),
+          tabPanel("Salmonella Typhi",
+                   br(),
+                   fluidRow(
+                     htmlOutput("organism_isolates_st"),
+                     column(8,
+                            h2("Susceptibility Status"),
+                            highchartOutput("organism_sir_st", height = "600px") %>% withSpinner()
+                     ),
+                     column(4,
+                            h3("Ciprofloxacin-resistant Salmonella Typhi"),
+                            highchartOutput("ciprofloxacin_st", height = "500px") %>% withSpinner()
+                     )
+                   )
+          ),
+          tabPanel("Shigella spp.",
+                   br(),
+                   fluidRow(
+                     htmlOutput("organism_isolates_shig"),
+                     column(8,
+                            h2("Susceptibility Status"),
+                            highchartOutput("organism_sir_shig", height = "600px") %>% withSpinner()
+                     ),
+                     column(4,
+                            h3("Ciprofloxacin-resistant Shigella spp."),
+                            highchartOutput("ciproflaxin_shig", height = "500px") %>% withSpinner()
+                     )
+                   )
+          ),
+          tabPanel("Neisseria gonorrhoeae",
+                   br(),
+                   fluidRow(
+                     htmlOutput("organism_isolates_ng"),
+                     column(8,
+                            h2("Susceptibility Status"),
+                            highchartOutput("organism_sir_ng", height = "600px") %>% withSpinner()
+                     ),
+                     column(4,
+                            h3("Ceftriaxone-resistant N. gonorrhoeae"),
+                            highchartOutput("ceftriaxone_gon", height = "500px") %>% withSpinner()
+                     )
+                   )
+          ),
+          tabPanel("All Organisms",
+                   br(),
+                   pickerInput(inputId = "organism", label = NULL, multiple = FALSE,
+                               choices = all_org_name, selected = all_org_name[1]),
+                   br(),
+                   fluidRow(
+                     htmlOutput("organism_isolates_all"),
+                     column(8,
+                            h2("Susceptibility Status"),
+                            highchartOutput("organism_sir_all", height = "600px") %>% withSpinner()
+                     ),
+                     column(4,
+                            br()
+                     )
+                   )
+          )
+        )
+    )
   )
 )
 
