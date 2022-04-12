@@ -2,7 +2,7 @@
 # Neisseria gonorrhoeae -----------------------------------------------------------------------------------------------------
 
 output$organism_isolates_ng <- renderText({
-  req(data_available())
+  
   organism <- "Neisseria gonorrhoeae"
   
   df <- amr_filt() %>% 
@@ -15,7 +15,7 @@ output$organism_isolates_ng <- renderText({
 # SIR Status ----------------------------------------------------------------------------------------------------------------
 
 output$organism_sir_ng <- renderHighchart({
-  req(data_available())
+  
   
   highchart_sir(data = amr_filt(), organism = "Neisseria gonorrhoeae")
 })
@@ -24,7 +24,7 @@ output$organism_sir_ng <- renderHighchart({
 # Ceftriaxone Status ---------------------------------------------------------------------------------------------------------------
 
 output$ceftriaxone_gon <- renderHighchart({
-  req(data_available())
+  
   
   organism <- "Neisseria gonorrhoeae"
   

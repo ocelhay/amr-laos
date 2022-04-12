@@ -1,5 +1,4 @@
 output$filter_text_blood <- renderText({
-  req(data_available())
   
   n_patients_start <- n_distinct(amr_blood()$patient_id)
   n_patients_end <- n_distinct(amr_blood_filt()$patient_id)

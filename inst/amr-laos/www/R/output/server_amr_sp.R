@@ -1,7 +1,7 @@
 # "Streptococcus pneumoniae" ------------------------------------------------
 
 output$organism_isolates_sp <- renderText({
-  req(data_available())
+  
   organism <- "Streptococcus pneumoniae"
   
   df <- amr_filt() %>% 
@@ -14,7 +14,7 @@ output$organism_isolates_sp <- renderText({
 # SIR Status ----------------------------------------------------------------------------------------------------------------
 
 output$organism_sir_sp <- renderHighchart({
-  req(data_available())
+  
   
   highchart_sir(data = amr_filt(), organism = "Streptococcus pneumoniae")
 })
@@ -23,7 +23,7 @@ output$organism_sir_sp <- renderHighchart({
 # Penicilin Status ---------------------------------------------------------------------------------------------------------------
 
 output$penicilin_sp <- renderHighchart({
-  req(data_available())
+  
   
   highchart_sir_evolution(data = amr_filt(), organism = "Streptococcus pneumoniae", 
                           antibiotic_vec = "Penicillin G", levels = c("Penicillin-susceptible", "Penicillin-intermediate", "Penicillin-resistant", "Not Tested")) 

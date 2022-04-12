@@ -1,7 +1,7 @@
 # "Shigella species" ------------------------------------------------
 
 output$organism_isolates_shig <- renderText({
-  req(data_available())
+  
   
   df <- amr_filt() %>% 
     filter(org_name |> startsWith("Shig")) 
@@ -13,7 +13,7 @@ output$organism_isolates_shig <- renderText({
 # SIR Status ----------------------------------------------------------------------------------------------------------------
 
 output$organism_sir_shig <- renderHighchart({
-  req(data_available())
+  
   
   selection_org <- amr_filt() |> 
     filter(org_name |> startsWith("Shig")) |> 
@@ -27,7 +27,7 @@ output$organism_sir_shig <- renderHighchart({
 # Ciprofloxacin Status ---------------------------------------------------------------------------------------------------------------
 
 output$ciproflaxin_shig <- renderHighchart({
-  req(data_available())
+  
   
   selection_org <- amr_filt() |> 
     filter(org_name |> startsWith("Shig")) |> 

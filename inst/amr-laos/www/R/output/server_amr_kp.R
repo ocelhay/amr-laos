@@ -4,7 +4,6 @@
 
 
 output$organism_isolates_kp <- renderText({
-  req(data_available())
   organism <- "Klebsiella pneumoniae"
   
   df <- amr_filt() %>% 
@@ -17,7 +16,6 @@ output$organism_isolates_kp <- renderText({
 # SIR Status ----------------------------------------------------------------------------------------------------------------
 
 output$organism_sir_kp <- renderHighchart({
-  req(data_available())
   
   highchart_sir(data = amr_filt(), organism = "Klebsiella pneumoniae")
 
@@ -28,7 +26,6 @@ output$organism_sir_kp <- renderHighchart({
 # ESBL Status ---------------------------------------------------------------------------------------------------------------
 
 output$esbl_kp <- renderHighchart({
-  req(data_available())
   
   organism <- "Klebsiella pneumoniae"
   

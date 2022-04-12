@@ -1,7 +1,7 @@
 # Escherichia coli ----------------------------------------------------------------------------------------------------------
 
 output$organism_isolates_ec <- renderText({
-  req(data_available())
+  
   organism <- "Escherichia coli"
   
   df <- amr_filt() %>% 
@@ -14,7 +14,7 @@ output$organism_isolates_ec <- renderText({
 # SIR Status ----------------------------------------------------------------------------------------------------------------
 
 output$organism_sir_ec <- renderHighchart({
-  req(data_available())
+  
   
   highchart_sir(data = amr_filt(), organism = "Escherichia coli")
 
@@ -25,7 +25,7 @@ output$organism_sir_ec <- renderHighchart({
 # ESBL Status ---------------------------------------------------------------------------------------------------------------
 
 output$esbl_ec <- renderHighchart({
-  req(data_available())
+  
   
   organism <- "Escherichia coli"
   

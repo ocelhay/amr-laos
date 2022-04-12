@@ -1,7 +1,7 @@
 # "All Organisms" ------------------------------------------------
 
 output$organism_isolates_all <- renderText({
-  req(data_available())
+  
   organism <- input$organism
   
   df <- amr_filt() %>% 
@@ -14,7 +14,7 @@ output$organism_isolates_all <- renderText({
 # SIR Status ----------------------------------------------------------------------------------------------------------------
 
 output$organism_sir_all <- renderHighchart({
-  req(data_available())
+  
   
   organism <- input$organism
   

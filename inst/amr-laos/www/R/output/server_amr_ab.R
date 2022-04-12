@@ -1,7 +1,7 @@
 # "Acinetobacter species" ------------------------------------------------
 
 output$organism_isolates_ab <- renderText({
-  req(data_available())
+  
 
   df <- amr_filt() %>% 
     filter(org_name |> startsWith("Acinetobacter")) 
@@ -13,7 +13,7 @@ output$organism_isolates_ab <- renderText({
 # SIR Status ----------------------------------------------------------------------------------------------------------------
 
 output$organism_sir_ab <- renderHighchart({
-  req(data_available())
+  
   
   selection_org <- amr_filt() |> 
     filter(org_name |> startsWith("Acinetobacter")) |> 
@@ -27,7 +27,7 @@ output$organism_sir_ab <- renderHighchart({
 # Carbapenem Status ---------------------------------------------------------------------------------------------------------------
 
 output$carbapenem_ab <- renderHighchart({
-  req(data_available())
+  
   
   selection_org <- amr_filt() |> 
     filter(org_name |> startsWith("Acinetobacter")) |> 

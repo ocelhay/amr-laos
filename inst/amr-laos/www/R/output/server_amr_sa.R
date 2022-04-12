@@ -1,7 +1,7 @@
 # "Staphylococcus aureus" ------------------------------------------------
 
 output$organism_isolates_sa <- renderText({
-  req(data_available())
+  
   organism <- "Staphylococcus aureus"
   
   df <- amr_filt() %>% 
@@ -14,7 +14,7 @@ output$organism_isolates_sa <- renderText({
 # SIR Status ----------------------------------------------------------------------------------------------------------------
 
 output$organism_sir_sa <- renderHighchart({
-  req(data_available())
+  
   
   highchart_sir(data = amr_filt(), organism = "Staphylococcus aureus")
 })
@@ -23,7 +23,7 @@ output$organism_sir_sa <- renderHighchart({
 # Cefoxitin MRSA ------------------------------------------------------------------------------------------------------------
 
 output$organism_mrsa_sa <- renderHighchart({
-  req(data_available())
+  
   
   organism <- "Staphylococcus aureus"
   antibiotic <- "Cefoxitin"
