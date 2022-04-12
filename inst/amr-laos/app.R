@@ -16,18 +16,18 @@ ui <- page(
     header = div(conditionalPanel(
       condition = "input.tabs != 'welcome'",
       div(id = "header-filter",
-          div(class = "border4",
+          div(class = "head_filter",
               fluidRow(
                 column(3, htmlOutput("data_status_duplicated")),
                 column(3, 
-                       h3(icon("filter", "fa-1x"), "Filter the Dataset:"),
+                       h5(icon("filter"), "Patients:"),
                        
                        fluidRow(
-                         column(4, p("Patients Age Range (Year):")),
+                         column(4, p("Age Range (Year):")),
                          column(8, sliderInput("age_patients_selection", label = NULL, min = 0, max = oldest_patient, value = c(0, oldest_patient)))
                        ),
                        fluidRow(
-                         column(4, p("Patients Province of Residence:")),
+                         column(4, p("Province of Residence:")),
                          column(8, pickerInput(inputId = "province_patients_selection", label = NULL, multiple = TRUE,
                                                choices = all_provinces, selected = all_provinces, options = list(
                                                  `actions-box` = TRUE, `deselect-all-text` = "None...",
@@ -36,8 +36,9 @@ ui <- page(
                        )
                 ),
                 column(3,
+                       h5(icon("filter"), "Specimens:"),
                        fluidRow(
-                         column(4, p("Specimens Collection Date:")),
+                         column(4, p("Collection Date:")),
                          column(8, selectInput("date_range_selection", label = NULL, choices = c("Filter by Year", "Filter by Date Range")),
                                 conditionalPanel("input.date_range_selection == 'Filter by Year'",
                                                  checkboxGroupInput("year_selection", label = NULL, choices = all_spec_year, selected = all_spec_year, inline = TRUE)
@@ -50,8 +51,9 @@ ui <- page(
                        )
                 ),
                 column(3,
+                       h5(""),
                        fluidRow(
-                         column(4, p("Specimens Collection Location:")),
+                         column(4, p("Collection Location:")),
                          column(8, pickerInput(inputId = "spec_method_collection", label = NULL, multiple = TRUE,
                                                choices = all_locations, selected = all_locations, options = list(
                                                  `actions-box` = TRUE, `deselect-all-text` = "None...",
@@ -64,7 +66,7 @@ ui <- page(
                                 ),
                                 conditionalPanel(condition = "input.tabs == 'patients' | input.tabs == 'specimens' | input.tabs == 'organisms' | input.tabs == 'amr'",
                                                  fluidRow(
-                                                   column(4, p("Specimens Collection Method:")),
+                                                   column(4, p("Collection Method:")),
                                                    column(8, pickerInput(inputId = "spec_method_selection", label = NULL, multiple = TRUE,
                                                                          choices = all_spec_method, selected = all_spec_method, options = list(
                                                                            `actions-box` = TRUE, `deselect-all-text` = "None...",
@@ -90,13 +92,18 @@ ui <- page(
     nav("Welcome", value = "welcome",
         fluidRow(
           column(4,
-                 div(class = "imgsolidborder4", img(src = "img_LOMWRU_Partners.jpg", alt = "LOMWRU")),
-                 div(class = "large",
-                     selectInput("selected_language", span(icon("language"), "Language"),
-                                 choices = c("Lao" = "la", "English" = "en"), selected = "en", width = "150px"),
-                 )),
-          column(8,
-                 htmlOutput("data_status")
+                 div(class = "imgsolidborder4", img(src = "img_LOMWRU_Partners.jpg", alt = "LOMWRU"))
+                 ),
+          column(4,
+                 htmlOutput("data_update")
+          ),
+          column(3, offset = 1,
+                 pickerInput(
+                   "selected_language", label = "Language:",
+                   choices = lang$val,
+                   selected = "en",
+                   choicesOpt = list(content = lang$flg)
+                 )
           )
         ),
         fluidRow(
@@ -309,39 +316,30 @@ ui <- page(
 server <- function(input, output, session) {
   # Report
   # https://stackoverflow.com/questions/51050306/have-downloadbutton-work-with-observeevent
-  feedback_download <- reactiveValues(download_flag = 0)
-  
-  output$report <- downloadHandler(
-    filename = "AMR Report.pdf",
-    content = function(file) {
-      feedback_download$download_flag <- feedback_download$download_flag + 1
-      if(feedback_download$download_flag > 0) {
-        showNotification(HTML("Generation of the report typically takes 10 to 30 seconds"), duration = NULL, type = "message", id = "report_generation", session = session)
-      }
-      tempReport <- file.path(tempdir(), "report.Rmd")
-      file.copy("./www/report/report.Rmd", tempReport, overwrite = TRUE)
-      rmarkdown::render(tempReport, output_file = file)
-      removeNotification(id = "report_generation", session = session)
-      showNotification(HTML("Report Generated"), duration = 4, type = "message", id = "report_generated", session = session)
-    }
-  )
+  # feedback_download <- reactiveValues(download_flag = 0)
+  # 
+  # output$report <- downloadHandler(
+  #   filename = "AMR Report.pdf",
+  #   content = function(file) {
+  #     feedback_download$download_flag <- feedback_download$download_flag + 1
+  #     if(feedback_download$download_flag > 0) {
+  #       showNotification(HTML("Generation of the report typically takes 10 to 30 seconds"), duration = NULL, type = "message", id = "report_generation", session = session)
+  #     }
+  #     tempReport <- file.path(tempdir(), "report.Rmd")
+  #     file.copy("./www/report/report.Rmd", tempReport, overwrite = TRUE)
+  #     rmarkdown::render(tempReport, output_file = file)
+  #     removeNotification(id = "report_generation", session = session)
+  #     showNotification(HTML("Report Generated"), duration = 4, type = "message", id = "report_generated", session = session)
+  #   }
+  # )
   
   # Initiate reactive values
-  data_available <- reactiveVal(TRUE)
   amr <- reactiveVal(lims$amr)
   source_data <- reactiveVal("LOMWRU")
   date_generation <- reactiveVal(lims$meta$generate)
   
-  # Hide several tabs at the launch of the app
-  # observeEvent(NULL, {
-  #   hideTab(inputId = "tabs", target = "blood_culture")
-  #   hideTab(inputId = "tabs", target = "patients")
-  #   hideTab(inputId = "tabs", target = "specimens")
-  #   hideTab(inputId = "tabs", target = "organisms")
-  #   hideTab(inputId = "tabs", target = "amr")
-  # }, ignoreNULL = FALSE)
+  # Define reactive elements --------------------------------------------------
   
-  # Create a reactive dataframe applying filters to amr
   amr_filt <- reactive({
     
     if(input$date_range_selection == "Filter by Year"){
@@ -379,8 +377,6 @@ server <- function(input, output, session) {
       filter(spec_method == "Blood culture")
   })
   
-  
-  # Create a reactive dataframe applying filters to amr_blood
   amr_blood_filt <- reactive({
     
     if(input$date_range_selection == "Filter by Year"){
@@ -419,34 +415,23 @@ server <- function(input, output, session) {
   # Render Text on number of specimens
   
   # List of information on the status of data
-  output$data_status <- renderText({
-    
-    ifelse(data_available(),
-           paste0(div(class = "info2", h4(icon("info-circle", "fa-1x"), "Data uploaded"), tags$ul( 
-             tags$li("Dataset: ", source_data()),
-             tags$li("Dataset generated on the ", date_generation()),
-             tags$li("Dataset contains ", n_distinct(amr()$patient_id), " patients", " and ", n_distinct(amr()$spec_id)," specimens."))
-           )),
-           paste0(div(class = "alert", h4(icon("exclamation-triangle", "fa-1x"), "There is no data to display"), "Upload a dataset provided by LOMWRU or 'Use Mock Dataset'."))
-    )
+  output$data_update <- renderText({
+    return(HTML("<div class='alert alert-success'><i class='fa fa-check'></i>&nbsp;Data last updated on ", 
+                format(date_generation(), "%d/%m/%Y")))
   })
   
   output$data_status_duplicated <- renderText({
     
-    ifelse(data_available(),
-           paste0(div(class = "info2", h4(icon("info-circle", "fa-1x"), "Data uploaded"), tags$ul( 
-             tags$li("Dataset: ", source_data()),
-             tags$li("Dataset generated on the ", date_generation()),
-             tags$li("Dataset contains ", n_distinct(amr()$patient_id), " patients", " and ", n_distinct(amr()$spec_id)," specimens."))
-           )),
-           paste0(div(class = "alert", h4(icon("exclamation-triangle", "fa-1x"), "There is no data to display,"), br(), "Upload a dataset provided by LOMWRU or 'Use Mock Dataset'."))
+    paste0(div(class = "info2", h4(icon("info-circle", "fa-1x"), "Data uploaded"), tags$ul( 
+      tags$li("Dataset: ", source_data()),
+      tags$li("Dataset generated on the ", date_generation()),
+      tags$li("Dataset contains ", n_distinct(amr()$patient_id), " patients", " and ", n_distinct(amr()$spec_id)," specimens.")))
     )
+    
   })
   
   
   output$filter_text <- renderText({
-    req(data_available())
-    
     n_patients_start <- n_distinct(amr()$patient_id)
     n_patients_end <- n_distinct(amr_filt()$patient_id)
     n_specimens_start <- n_distinct(amr()$spec_id)
