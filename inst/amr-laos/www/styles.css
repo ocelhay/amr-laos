@@ -1,3 +1,8 @@
+/* Bootstrap elements:
+https://bootswatch.com/4/
+*/
+
+
 /* Images */
 
 img {
@@ -13,18 +18,17 @@ img {
 }
 
 
+.language_name {
+  display: inline;
+  vertical-align: middle;
+  padding-left: 10px;
+}
+
 
 /* Boxes */
 
 .h4 {
   color: white;
-}
-
-.alert {  /* Red fill and white text*/
-  padding: 10px;
-  background-color: #d63031;
-  color: white;
-  margin-bottom: 5px;
 }
 
 .info2 { /* Blue fill and white text*/
@@ -41,11 +45,12 @@ img {
 
 
 
-/* Remove the sidebar panel border */
+/* Remove the sidebar panel border
 .well {
   background-color: #fff;
   border-style: none;
 }
+ */
 
 /* Shiny notification*/
 
@@ -56,30 +61,9 @@ img {
 }
 
 
-
-/* Borders to differentiate different sections
-http://colorbrewer2.org/#type=qualitative&scheme=Set1&n=3 */
-
-.border1 {
-  border: solid #e41a1c 3px;
-  padding: 10px;
-  border-radius: 8px;
-}
-
-.border2 {
-  border: solid #377eb8 3px;
-  padding: 10px;
-  border-radius: 8px;
-}
-
-.border3 {
-  border: solid #4daf4a 3px;
-  padding: 10px;
-  border-radius: 8px;
-}
-
-.border4 {
-  border: solid #808080 3px; /*Ggrey */
+.head_filter {
+  border: solid #808080 3px;
+  margin: 20px;
   padding: 10px;
   border-radius: 8px;
 }
@@ -100,16 +84,6 @@ img {
   padding: 10px;
   z-index: 999999999;
   position: fixed;
-}
-
-
-.watermark {
-  opacity: 0.2;
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  font-size: 500%;
-  color: #00407d;
 }
 
 .left {
