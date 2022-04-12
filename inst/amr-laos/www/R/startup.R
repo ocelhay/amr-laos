@@ -11,13 +11,22 @@ library(shinyWidgets)
 library(tidyverse)
 library(viridisLite)
 
+# Languages
+lang <- data.frame(
+  val = c("en", "la"),
+  flg = c(
+    "<img src = './images/img_gb.png' width = 20px><div class='language_name'>English</div></img>",
+    "<img src = './images/img_la.png' width = 20px><div class='language_name'>Lao</div></img>"
+  )
+)
+
 # Colors order: S, I, R, Not Tested
 cols_sir <- c("#2166ac", "#fddbc7", "#b2182b", "#969696")
 
 # Colors order: Negative, Positive, Unknown
 cols_esbl <- c("#2166ac", "#b2182b", "#969696")
 
-amr_theme <- bslib::bs_theme(bootswatch = "spacelab", version = 4)
+amr_theme <- bslib::bs_theme(version = 4, bootswatch = "flatly")
 
 source("www/R/function/highchart_sir.R", local = TRUE)$value
 source("www/R/function/highchart_sir_evolution.R", local = TRUE)$value
@@ -26,7 +35,6 @@ bugantibio <- read_excel("www/data/bug-antibio_display.xlsx") %>%
   pivot_longer(-Antibiotics, names_to = "bug", values_to = "display") %>%
   rename(antibio = Antibiotics)
 
-# load("inst/amr-laos/www/data/lims_processed.RData")
 load("www/data/lims_processed.RData")
 
 # Recoding
@@ -71,11 +79,9 @@ lims$amr <- lims$amr %>%
   rename(province = province_recode)
 
 
-
 lims$amr$spec_method[lims$amr$spec_method  == "Haemoculture"] <- "Blood culture"
 
 lims$amr$age_years[lims$amr$age_years > 125] <- NA
-
 
 all_provinces <- sort(unique(lims$amr$province))
 all_locations <- sort(unique(lims$amr$location))
