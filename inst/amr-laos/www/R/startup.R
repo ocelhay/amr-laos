@@ -5,6 +5,7 @@ library(glue)
 library(highcharter)
 library(lubridate)
 library(markdown)
+library(prompter)
 library(readxl)
 library(shiny)
 library(shinycssloaders)
@@ -83,7 +84,22 @@ lims$amr <- lims$amr %>%
 
 lims$amr$spec_method[lims$amr$spec_method  == "Haemoculture"] <- "Blood culture"
 
-lims$amr$age_years[lims$amr$age_years > 125] <- NA
+# Create an age category for filters.
+lims$amr <- lims$amr |> 
+  replace_na(list(age_years = 0, age_months = 0, age_days = 0)) |> 
+  mutate(age_total_days = 365.25 * age_years + 30.4167 * age_months + age_days) |> 
+  mutate(age_category = case_when(
+    age_total_days >= 15 * 365.25 ~ "Adult",
+    age_total_days > 28 & (age_total_days <= 15 * 365.25) ~ "Child",
+    age_total_days <= 28 & age_total_days >= 1 ~ "Neonate",
+    TRUE ~ "Unknown"
+  ))
+
+if (sum(lims$amr$age_category == "Unknown") > 0) warning("Some ages are missing")
+
+# Check coherence:
+# table(lims$amr$age_category, useNA = "always")
+# lims$amr |> filter(age_category == "Unknown") |> select(starts_with("age"))
 
 all_provinces <- sort(unique(lims$amr$province))
 all_locations <- sort(unique(lims$amr$location))

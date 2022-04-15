@@ -4,6 +4,7 @@ source("www/R/startup.R", local = TRUE)
 ui <- page(
   theme = amr_theme,
   includeCSS("www/styles.css"),
+  use_prompt(),
   page_navbar(
     title = "Lao AMR Dashboard",
     id = "tabs",
@@ -19,24 +20,25 @@ ui <- page(
       div(id = "head_filter",
           fluidRow(
             column(3, 
-                   h5(icon("filter"), "Patients:"),
-                   
-                   fluidRow(
-                     column(4, p("Age Range (Year):")),
-                     column(8, sliderInput("age_patients_selection", label = NULL, min = 0, max = oldest_patient, value = c(0, oldest_patient)))
+                   h5(icon("hospital-user"), "Patients:"),
+                   add_prompt(
+                     prettyCheckboxGroup("age_cat_selection", NULL, shape = "curve", status = "primary",
+                                         choices = c("Adult", "Child", "Neonate", "Unknown"), 
+                                         selected = c("Adult", "Child", "Neonate", "Unknown"), inline = TRUE),
+                     position = "bottom-right", message = "Adult = above 15 y.o.; Child = 1 month to 15 y.o.; Neonate = below one month old",
+                     size = "medium"
                    ),
-                   fluidRow(
-                     column(4, p("Province of Residence:")),
-                     column(8, pickerInput(inputId = "province_patients_selection", label = NULL, multiple = TRUE,
-                                           choices = all_provinces, selected = all_provinces, options = list(
-                                             `actions-box` = TRUE, `deselect-all-text` = "None...",
-                                             `select-all-text` = "Select All", `none-selected-text` = "None Selected")
-                     ))
+                   p("Province of Residence:"),
+                   pickerInput("province_patients_selection", NULL, multiple = TRUE,
+                               choices = all_provinces, selected = all_provinces, 
+                               options = list(`actions-box` = TRUE, 
+                                              `selected-text-format` = paste0("count > ", length(all_provinces) - 1), 
+                                              `count-selected-text` = "All Provinces")
                    )
             ),
             column(3, 
                    htmlOutput("data_status_duplicated")
-                   ),
+            ),
             column(3,
                    h5(icon("filter"), "Specimens:"),
                    fluidRow(
@@ -50,7 +52,7 @@ ui <- page(
                                              br(), br(),
                                              dateRangeInput("date_selection", label = NULL, start = min_collection_date, end = max_collection_date)
                             )
-                            )
+                     )
                    ),
                    pickerInput(inputId = "spec_method_collection", label = NULL, multiple = TRUE,
                                choices = all_locations, selected = all_locations, options = list(
@@ -82,9 +84,9 @@ ui <- page(
             ),
             column(3,
                    h5("Number of specimens left"),
-                   )
-            ))
-      )
+            )
+          ))
+    )
     ),
     
     # Start Tabs --------------------------------------------------------------
@@ -347,8 +349,7 @@ server <- function(input, output, session) {
       return(
         amr() %>%
           filter(
-            age_years >= input$age_patients_selection[1] | is.na(age_years),
-            age_years <= input$age_patients_selection[2] | is.na(age_years),
+            age_category %in% input$age_cat_selection,
             province %in% input$province_patients_selection | is.na(province),
             spec_year %in% input$year_selection | is.na(spec_year),
             spec_method %in% input$spec_method_selection | is.na(spec_method),
@@ -361,8 +362,7 @@ server <- function(input, output, session) {
       return(
         amr() %>%
           filter(
-            age_years >= input$age_patients_selection[1] | is.na(age_years),
-            age_years <= input$age_patients_selection[2] | is.na(age_years),
+            age_category %in% input$age_cat_selection,
             province %in% input$province_patients_selection | is.na(province),
             spec_date >= input$date_selection[1] | is.na(spec_date),
             spec_date <= input$date_selection[2] | is.na(spec_date),
@@ -385,8 +385,7 @@ server <- function(input, output, session) {
         amr() %>%
           filter(spec_method == "Blood culture") %>%
           filter(
-            age_years >= input$age_patients_selection[1] | is.na(age_years),
-            age_years <= input$age_patients_selection[2] | is.na(age_years),
+            age_category %in% input$age_cat_selection,
             province %in% input$province_patients_selection | is.na(province),
             spec_year %in% input$year_selection | is.na(spec_year),
             location %in% input$spec_method_collection  | is.na(spec_method)
@@ -399,8 +398,7 @@ server <- function(input, output, session) {
         amr() %>%
           filter(spec_method == "Blood culture") %>%
           filter(
-            age_years >= input$age_patients_selection[1] | is.na(age_years),
-            age_years <= input$age_patients_selection[2] | is.na(age_years),
+            age_category %in% input$age_cat_selection,
             province %in% input$province_patients_selection | is.na(province),
             spec_date >= input$date_selection[1] | is.na(spec_date),
             spec_date <= input$date_selection[2] | is.na(spec_date),
