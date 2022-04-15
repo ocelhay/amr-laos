@@ -2,35 +2,7 @@
 https://bootswatch.com/4/
 */
 
-
-/* Images */
-
-img {
-    max-width: 100%;
-    max-height: 100%;
-}
-
-.imgsolidborder {
-  width: 95%;
-  border: solid #021a40 3px;
-  margin-left: 10px;
-  margin-right: 10px;
-}
-
-
-.language_name {
-  display: inline;
-  vertical-align: middle;
-  padding-left: 10px;
-}
-
-
 /* Boxes */
-
-.h4 {
-  color: white;
-}
-
 .info2 { /* Blue fill and white text*/
   padding: 10px;
   background-color: #0984e3; 
@@ -61,7 +33,7 @@ img {
 }
 
 
-.head_filter {
+#head_filter {
   border: solid #808080 3px;
   margin: 20px;
   padding: 10px;

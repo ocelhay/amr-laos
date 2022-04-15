@@ -1,22 +1,24 @@
 # Load packages
 library(bslib)
-library(DT)
+# library(DT)
+library(glue)
 library(highcharter)
 library(lubridate)
 library(markdown)
 library(readxl)
 library(shiny)
 library(shinycssloaders)
+library(shinyjs)
 library(shinyWidgets)
 library(tidyverse)
-library(viridisLite)
+# library(viridisLite)
 
 # Languages
 lang <- data.frame(
   val = c("en", "la"),
   flg = c(
-    "<img src = './images/img_gb.png' width = 20px><div class='language_name'>English</div></img>",
-    "<img src = './images/img_la.png' width = 20px><div class='language_name'>Lao</div></img>"
+    "<span><i class='fa fa-language' role='presentation' aria-label='language icon'></i> English</span>",
+    "<span><i class='fa fa-language' role='presentation' aria-label='language icon'></i> Lao</span>"
   )
 )
 

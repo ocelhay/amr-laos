@@ -15,100 +15,101 @@ ui <- page(
     # Header with filters -----------------------------------------------------
     header = div(conditionalPanel(
       condition = "input.tabs != 'welcome'",
-      div(id = "header-filter",
-          div(class = "head_filter",
-              fluidRow(
-                column(3, htmlOutput("data_status_duplicated")),
-                column(3, 
-                       h5(icon("filter"), "Patients:"),
-                       
-                       fluidRow(
-                         column(4, p("Age Range (Year):")),
-                         column(8, sliderInput("age_patients_selection", label = NULL, min = 0, max = oldest_patient, value = c(0, oldest_patient)))
-                       ),
-                       fluidRow(
-                         column(4, p("Province of Residence:")),
-                         column(8, pickerInput(inputId = "province_patients_selection", label = NULL, multiple = TRUE,
-                                               choices = all_provinces, selected = all_provinces, options = list(
-                                                 `actions-box` = TRUE, `deselect-all-text` = "None...",
-                                                 `select-all-text` = "Select All", `none-selected-text` = "None Selected")
-                         ))
-                       )
-                ),
-                column(3,
-                       h5(icon("filter"), "Specimens:"),
-                       fluidRow(
-                         column(4, p("Collection Date:")),
-                         column(8, selectInput("date_range_selection", label = NULL, choices = c("Filter by Year", "Filter by Date Range")),
-                                conditionalPanel("input.date_range_selection == 'Filter by Year'",
-                                                 checkboxGroupInput("year_selection", label = NULL, choices = all_spec_year, selected = all_spec_year, inline = TRUE)
-                                                 
-                                ),
-                                conditionalPanel("input.date_range_selection == 'Filter by Date Range'",
-                                                 br(), br(),
-                                                 dateRangeInput("date_selection", label = NULL, start = min_collection_date, end = max_collection_date)
-                                ))
-                       )
-                ),
-                column(3,
-                       h5(""),
-                       fluidRow(
-                         column(4, p("Collection Location:")),
-                         column(8, pickerInput(inputId = "spec_method_collection", label = NULL, multiple = TRUE,
-                                               choices = all_locations, selected = all_locations, options = list(
-                                                 `actions-box` = TRUE, `deselect-all-text` = "None...",
-                                                 `select-all-text` = "Select All", `none-selected-text` = "None Selected")),
-                                conditionalPanel(condition = "input.tabs == 'blood_culture'",
-                                                 fluidRow(
-                                                   column(4, p("Specimens Collection Method:")),
-                                                   column(8, strong("Blood Culture Only"))
-                                                 )
-                                ),
-                                conditionalPanel(condition = "input.tabs == 'patients' | input.tabs == 'specimens' | input.tabs == 'organisms' | input.tabs == 'amr'",
-                                                 fluidRow(
-                                                   column(4, p("Collection Method:")),
-                                                   column(8, pickerInput(inputId = "spec_method_selection", label = NULL, multiple = TRUE,
-                                                                         choices = all_spec_method, selected = all_spec_method, options = list(
-                                                                           `actions-box` = TRUE, `deselect-all-text` = "None...",
-                                                                           `select-all-text` = "Select All", `none-selected-text` = "None Selected")
-                                                   )
-                                                   )
-                                                 )
-                                ),
-                                conditionalPanel(condition = "input.tabs == 'patients' | input.tabs == 'specimens' | input.tabs == 'organisms' | input.tabs == 'amr'",
-                                                 htmlOutput("filter_text")
-                                ),
-                                conditionalPanel(condition = "input.tabs == 'blood_culture'",
-                                                 htmlOutput("filter_text_blood")
-                                )
-                         )
-                       )
-                ))
-          ))
-    )
+      
+      div(id = "head_filter",
+          fluidRow(
+            column(3, 
+                   h5(icon("filter"), "Patients:"),
+                   
+                   fluidRow(
+                     column(4, p("Age Range (Year):")),
+                     column(8, sliderInput("age_patients_selection", label = NULL, min = 0, max = oldest_patient, value = c(0, oldest_patient)))
+                   ),
+                   fluidRow(
+                     column(4, p("Province of Residence:")),
+                     column(8, pickerInput(inputId = "province_patients_selection", label = NULL, multiple = TRUE,
+                                           choices = all_provinces, selected = all_provinces, options = list(
+                                             `actions-box` = TRUE, `deselect-all-text` = "None...",
+                                             `select-all-text` = "Select All", `none-selected-text` = "None Selected")
+                     ))
+                   )
+            ),
+            column(3, 
+                   htmlOutput("data_status_duplicated")
+                   ),
+            column(3,
+                   h5(icon("filter"), "Specimens:"),
+                   fluidRow(
+                     column(4, p("Collection Date:")),
+                     column(8, selectInput("date_range_selection", label = NULL, choices = c("Filter by Year", "Filter by Date Range")),
+                            conditionalPanel("input.date_range_selection == 'Filter by Year'",
+                                             checkboxGroupInput("year_selection", label = NULL, choices = all_spec_year, selected = all_spec_year, inline = TRUE)
+                                             
+                            ),
+                            conditionalPanel("input.date_range_selection == 'Filter by Date Range'",
+                                             br(), br(),
+                                             dateRangeInput("date_selection", label = NULL, start = min_collection_date, end = max_collection_date)
+                            )
+                            )
+                   ),
+                   pickerInput(inputId = "spec_method_collection", label = NULL, multiple = TRUE,
+                               choices = all_locations, selected = all_locations, options = list(
+                                 `actions-box` = TRUE, `deselect-all-text` = "None...",
+                                 `select-all-text` = "Select All", `none-selected-text` = "None Selected")),
+                   conditionalPanel(condition = "input.tabs == 'blood_culture'",
+                                    fluidRow(
+                                      column(4, p("Specimens Collection Method:")),
+                                      column(8, strong("Blood Culture Only"))
+                                    )
+                   ),
+                   conditionalPanel(condition = "input.tabs == 'patients' | input.tabs == 'specimens' | input.tabs == 'organisms' | input.tabs == 'amr'",
+                                    fluidRow(
+                                      column(4, p("Collection Method:")),
+                                      column(8, pickerInput(inputId = "spec_method_selection", label = NULL, multiple = TRUE,
+                                                            choices = all_spec_method, selected = all_spec_method, options = list(
+                                                              `actions-box` = TRUE, `deselect-all-text` = "None...",
+                                                              `select-all-text` = "Select All", `none-selected-text` = "None Selected")
+                                      )
+                                      )
+                                    )
+                   ),
+                   conditionalPanel(condition = "input.tabs == 'patients' | input.tabs == 'specimens' | input.tabs == 'organisms' | input.tabs == 'amr'",
+                                    htmlOutput("filter_text")
+                   ),
+                   conditionalPanel(condition = "input.tabs == 'blood_culture'",
+                                    htmlOutput("filter_text_blood")
+                   )
+            ),
+            column(3,
+                   h5("Number of specimens left"),
+                   )
+            ))
+      )
     ),
     
     # Start Tabs --------------------------------------------------------------
     nav("Welcome", value = "welcome",
         fluidRow(
           column(4,
-                 div(class = "imgsolidborder4", img(src = "img_LOMWRU_Partners.jpg", alt = "LOMWRU"))
-                 ),
+                 img(src = "img_LOMWRU_Partners.jpg", alt = "LOMWRU", width = "100%")
+          ),
           column(4,
                  htmlOutput("data_update")
           ),
           column(3, offset = 1,
                  pickerInput(
-                   "selected_language", label = "Language:",
+                   "selected_language", label = NULL,
                    choices = lang$val,
                    selected = "en",
-                   choicesOpt = list(content = lang$flg)
+                   choicesOpt = list(content = lang$flg),
+                   width = "200px"
                  )
           )
         ),
         fluidRow(
           column(4,
-                 div(class = "imgsolidborder4", img(src = "img_ecoli_LOMWRU.png", alt = "Antibiotic susceptibility testing of a multi-drug resistant Escherichia coli isolated from the urine of a 51 year old Lao patient with a perinephric abscess. There are no inhibition zones surrounding any of the antibiotic disks, including meropenem (MEM, 12 o’clock position), a ‘last-line’ antibiotic. Whole-genome sequencing confirmed that this isolate was carrying a NDM-5 carbapenemase. Such infections are likely to become more frequent, given the ability of carbapenemases to spread and the increasing availability of meropenem in Laos.")),
+                 img(src = "img_ecoli_LOMWRU.png", alt = "Antibiotic susceptibility testing of a multi-drug resistant Escherichia coli isolated from the urine of a 51 year old Lao patient with a perinephric abscess. There are no inhibition zones surrounding any of the antibiotic disks, including meropenem (MEM, 12 o’clock position), a ‘last-line’ antibiotic. Whole-genome sequencing confirmed that this isolate was carrying a NDM-5 carbapenemase. Such infections are likely to become more frequent, given the ability of carbapenemases to spread and the increasing availability of meropenem in Laos.",
+                     width = "80%"),
                  conditionalPanel("input.selected_language == 'en'",
                                   includeMarkdown("./www/markdown/ecoli_legend_en.md")
                  ),
@@ -155,7 +156,7 @@ ui <- page(
           ),
           column(4,
                  p("Table of all organisms:"),
-                 DTOutput("table_organisms_blood") %>% withSpinner()
+                 DT::DTOutput("table_organisms_blood") %>% withSpinner()
           )
         ),
         br()
@@ -532,7 +533,7 @@ server <- function(input, output, session) {
       theme(axis.text.y = element_text(face = 'italic'))
   })
   
-  output$table_isolates_organisms <- renderDT({
+  output$table_isolates_organisms <- DT::renderDT({
     req(nrow(amr_filt()) > 0)
     
     amr_filt() %>%
