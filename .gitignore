@@ -14,3 +14,4 @@ misc/data_processed/lims_processed.RData
 inst/amr-laos/www/R/.DS_Store
 .DS_Store
 .Rproj.user
+misc/data_provided_gitignored/LIMS_2021_long.xlsx

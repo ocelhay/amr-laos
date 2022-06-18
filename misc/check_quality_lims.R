@@ -5,9 +5,10 @@ library(writexl)
 
 # Change these paths to reflect where the lims_file and dic_file are located on your laptop and where to save the processed files.
 # The rest of the script should run silently and, at the end, generate two files "lims_processed.xlsx" and, in the same folder "lims_processed.RData"
-lims_file <- "/Users/olivier/Documents/Projets/LOMWRU/AMR in Laos/amr-dashboard/misc/data_provided_gitignored/LIMS_AMR_combined_18082021.xlsx"
-dic_file <- "/Users/olivier/Documents/Projets/LOMWRU/AMR in Laos/amr-dashboard/misc/data_provided_gitignored/LIMS_AMR_codes.xlsx"
-lims_processed_file <- "/Users/olivier/Documents/Projets/LOMWRU/AMR in Laos/amr-dashboard/misc/data_processed/lims_processed.xlsx"
+
+lims_file <- "/Users/olivier/Documents/Projets/LOMWRU/AMR in Laos/amr-laos/misc/data_provided_gitignored/LIMS_2021_long.xlsx"
+dic_file <- "/Users/olivier/Documents/Projets/LOMWRU/AMR in Laos/amr-laos/misc/data_provided_gitignored/LIMS_AMR_codes.xlsx"
+lims_processed_file <- "/Users/olivier/Documents/Projets/LOMWRU/AMR in Laos/amr-laos/misc/data_processed/lims_processed.xlsx"
 
 # Read files
 lims <- readxl::read_excel(lims_file, guess_max = 1000000) |> janitor::clean_names()

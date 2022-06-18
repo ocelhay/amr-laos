@@ -1,6 +1,6 @@
 # Load packages
 library(bslib)
-# library(DT)
+library(DT)
 library(glue)
 library(highcharter)
 library(lubridate)
